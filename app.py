@@ -3,7 +3,7 @@ from utils.api_connect import generate_image_api, generate_video_api, check_back
 import time
 
 st.set_page_config(
-    page_title="Innovora - The future of marketing content with AI.",
+    page_title="INNOV ORA -The future of marketing content with AI",
     layout="wide",
     page_icon="🎯"
 )
@@ -294,7 +294,7 @@ if 'backend_status' not in st.session_state:
 with st.sidebar:
     st.markdown('''
     <div class="sidebar-card">
-        <div class="sidebar-brand">🎯 Innovora.ai</div>
+        <div class="sidebar-brand">🎯 INNOV ORA</div>
         <div class="sidebar-subtitle">The future of marketing content with AI</div>
     </div>
     ''', unsafe_allow_html=True)
@@ -399,7 +399,7 @@ with st.sidebar:
 st.markdown("""
 <div class="main-header">
     <div class="header-content">
-        <h1 class="brand-title">🎯 Innovora.ai</h1>
+        <h1 class="brand-title">🎯 INNOV ORA</h1>
         <p class="tagline">Multi-Model AI Generation: Images & Videos for Your Marketing Content</p>
     </div>
 </div>
@@ -430,6 +430,9 @@ with tab1:
 
     col1, col2 = st.columns([2, 1])
     with col1:
+        brand = st.text_input("🏷️ Brand Name", placeholder="e.g., Innovora")
+        brand_link = st.text_input("🔗 Brand Website Link", placeholder="https://innovora.ai")
+
         ad_text = st.text_area(
             "✍️ Describe Your Image", 
             placeholder="A futuristic AI robot in a cyberpunk city at night, neon lights, professional photography, 4K quality...", 
@@ -443,13 +446,15 @@ with tab1:
 
     with col2:
         ad_format = st.selectbox(
-            "📐 Image Format",
+            "📐 Ad Size / Format",
             [
-                "Square (1024x1024)",
-                "Landscape (1792x1024)", 
-                "Portrait (1024x1792)"
+                "Instagram Post (1080x1080)",
+                "LinkedIn Post (1200x627)",
+                "YouTube Thumbnail (1280x720)",
+                "Facebook Ad (1200x628)",
+                "Website Banner (1920x600)",
+                "Poster (2480x3508)"
             ],
-            help="Choose your desired format"
         )
         
         st.info("""
@@ -479,10 +484,17 @@ with tab1:
             if isinstance(health, dict) and health.get("status") is None:
                 st.info("⏱️ Backend is cold starting. First request may take 60-90 seconds...")
             
+            payload = {
+                "brand_name": brand,
+                "brand_link": brand_link,
+                "prompt": ad_text,
+                "ad_format": ad_format
+            }
+
+            
             start_time = time.time()
             
             with st.spinner("🎨 AI is creating your image... This takes 10-30 seconds"):
-                payload = {"prompt": ad_text}
                 result = generate_image_api(payload)
             
             elapsed_time = time.time() - start_time
